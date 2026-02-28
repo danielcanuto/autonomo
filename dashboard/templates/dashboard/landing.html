@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autônomo Pro - Gestão Inteligente para Profissionais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #4f46e5, #ec4899);
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased text-gray-900 bg-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-gray-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        A
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight text-gray-900">Autônomo<span
+                            class="text-brand-600">Pro</span></span>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features"
+                        class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Funcionalidades</a>
+                    <a href="#benefits"
+                        class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Benefícios</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'admin:login' %}"
+                        class="hidden md:inline-flex text-gray-700 hover:text-brand-600 font-medium transition-colors">Entrar</a>
+                    <a href="{% url 'admin:login' %}"
+                        class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full text-white bg-gray-900 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                        Acessar Sistema
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+        class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-gradient min-h-[90vh] flex items-center">
+        <!-- Decorative blobs -->
+        <div
+            class="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob">
+        </div>
+        <div
+            class="absolute top-0 right-48 translate-y-24 w-72 h-72 bg-brand-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000">
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div
+                class="inline-flex items-center px-4 py-2 rounded-full border border-brand-200 bg-brand-50 text-brand-700 text-sm font-semibold mb-8 shadow-sm">
+                <span class="flex w-2 h-2 rounded-full bg-brand-500 mr-2 blink"></span>
+                O sistema definitivo para prestadores de serviço
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
+                Gestão simplificada,<br>
+                <span class="text-gradient">lucro maximizado.</span>
+            </h1>
+
+            <p class="mt-4 text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10 font-light leading-relaxed">
+                Abandone as planilhas. Gerencie seus clientes, orçamentos, contratos e agenda em uma única plataforma
+                incrivelmente rápida e elegante.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="{% url 'admin:login' %}"
+                    class="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-brand-600 hover:bg-brand-700 shadow-xl hover:shadow-2xl hover:shadow-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                    Comece Agora
+                    <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="#features"
+                    class="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 shadow-sm hover:shadow-md transition-all duration-300">
+                    <i class="fas fa-play-circle mr-2 text-brand-500"></i> Ver Funcionalidades
+                </a>
+            </div>
+
+            <!-- Dashboard preview snippet -->
+            <div class="mt-20 relative max-w-5xl mx-auto">
+                <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Dashboard Preview"
+                    class="rounded-2xl shadow-2xl border border-gray-100 object-cover opacity-90 h-[400px] w-full object-top">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-base text-brand-600 font-semibold tracking-wide uppercase">Tudo que você precisa</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Ferramentas profissionais para o seu negócio
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Feature 1 -->
+                <div
+                    class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
+                    <div
+                        class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-users text-2xl text-brand-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Gestão de Clientes</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Tenha o histórico completo de cada cliente na palma da mão. Contatos, contratos passados e
+                        observações personalizadas.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
+                    <div
+                        class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-file-signature text-2xl text-brand-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Contratos Inteligentes</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Vincule serviços facilmente. Acompanhe se o contrato está ativo, finalizado ou com pagamentos
+                        pendentes em tempo real.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
+                    <div
+                        class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-calendar-check text-2xl text-brand-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Agenda Dinâmica</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Nunca mais perca um agendamento. Seu painel principal exibe os próximos eventos de forma clara e
+                        interativa.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-gray-900 relative overflow-hidden">
+        <div class="absolute inset-0 bg-brand-900 opacity-50"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl mb-6">
+                Pronto para digitalizar sua carreira?
+            </h2>
+            <p class="text-xl text-brand-100 mb-10">
+                Junte-se ao sistema desenhado exclusivamente para profissionais autônomos exigentes.
+            </p>
+            <a href="{% url 'admin:login' %}"
+                class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold rounded-full text-brand-900 bg-white hover:bg-gray-100 shadow-xl transition-all duration-300 transform hover:scale-105">
+                Acessar meu Painel
+                <i class="fas fa-sign-in-alt ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+            <div class="flex items-center gap-2 mb-4">
+                <div
+                    class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-sm">
+                    A</div>
+                <span class="font-bold text-xl text-gray-900">AutônomoPro</span>
+            </div>
+            <p class="text-gray-500 text-sm text-center">
+                &copy; 2026 Autônomo Pro. O padrão ouro em gestão para autônomos.<br>
+                Feito com Django & Tailwind CSS.
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
