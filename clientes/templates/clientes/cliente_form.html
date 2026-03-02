@@ -1,0 +1,159 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">{{ titulo }}</h1>
+        <a href="{% url 'clientes:cliente_list' %}"
+            class="text-sm font-medium text-gray-600 hover:text-indigo-600">&larr; Voltar para lista</a>
+    </div>
+
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+        <form method="POST" class="p-6 space-y-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nome -->
+                <div class="col-span-2">
+                    <label for="{{ form.nome.id_for_label }}" class="block text-sm font-medium text-gray-700">Nome
+                        Completo / Razão Social</label>
+                    {{ form.nome }}
+                    {% if form.nome.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.nome.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Tipo de Pessoa -->
+                <div>
+                    <label for="{{ form.tipo_pessoa.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">Tipo de Pessoa</label>
+                    {{ form.tipo_pessoa }}
+                </div>
+
+                <!-- Documento -->
+                <div>
+                    <label id="doc_label" for="{{ form.documento.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">
+                        {% if form.tipo_pessoa.value == 'PJ' %}CNPJ{% else %}CPF{% endif %}
+                    </label>
+                    {{ form.documento }}
+                    {% if form.documento.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.documento.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="{{ form.email.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">E-mail</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Telefone -->
+                <div>
+                    <label for="{{ form.telefone.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">Telefone</label>
+                    {{ form.telefone }}
+                    {% if form.telefone.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.telefone.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Endereço -->
+                <div class="col-span-2">
+                    <label for="{{ form.endereco.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">Endereço Completo</label>
+                    {{ form.endereco }}
+                    {% if form.endereco.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.endereco.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Observações -->
+                <div class="col-span-2">
+                    <label for="{{ form.observacoes.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700">Observações Internas</label>
+                    {{ form.observacoes }}
+                    {% if form.observacoes.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.observacoes.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 flex justify-end gap-3">
+                <a href="{% url 'clientes:cliente_list' %}"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</a>
+                <button type="submit"
+                    class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Salvar
+                    Registro</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const docInput = document.getElementById('{{ form.documento.id_for_label }}');
+    const tipoInput = document.getElementById('{{ form.tipo_pessoa.id_for_label }}');
+    const telInput = document.getElementById('{{ form.telefone.id_for_label }}');
+    const label = document.getElementById('doc_label');
+
+    function updateDocInterface() {
+        const valor = tipoInput.value;
+        if (valor === 'PJ') {
+            label.innerText = 'CNPJ';
+            docInput.placeholder = '00.000.000/0000-00';
+        } else {
+            label.innerText = 'CPF';
+            docInput.placeholder = '000.000.000-00';
+        }
+        applyMaskLogic();
+    }
+
+    function applyMaskLogic() {
+        let value = docInput.value.replace(/\D/g, "");
+        const tipo = tipoInput.value;
+
+        if (tipo === 'PF') {
+            if (value.length > 11) value = value.slice(0, 11);
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else {
+            if (value.length > 14) value = value.slice(0, 14);
+            value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            value = value.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+        docInput.value = value;
+    }
+
+    function applyPhoneMask() {
+        let value = telInput.value.replace(/\D/g, "");
+        if (value.length > 11) value = value.slice(0, 11);
+
+        if (value.length > 10) {
+            value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+        } else if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d{4})(\d)/, "($1) $2-$3");
+        } else {
+            value = value.replace(/^(\d{2})/, "($1)");
+        }
+        telInput.value = value;
+    }
+
+    docInput.addEventListener('input', applyMaskLogic);
+    tipoInput.addEventListener('change', updateDocInterface);
+    telInput.addEventListener('input', applyPhoneMask);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateDocInterface();
+        applyPhoneMask();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ titulo }}</h1>
+        <p class="text-sm text-gray-500 font-medium">Configure a identidade visual e os dados fiscais da sua empresa ou
+            seu perfil autônomo.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+        {% csrf_token %}
+
+        <!-- Identidade Visual -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-50 bg-gray-50/50">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Identidade Visual</h3>
+            </div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <p class="text-xs text-gray-500 leading-relaxed">Sua logo será utilizada nos orçamentos, contratos e
+                        documentos gerados pelo sistema. Recomendamos arquivos em PNG ou JPG com fundo transparente.</p>
+                    <div class="flex items-center gap-4">
+                        <label
+                            class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-indigo-100 cursor-pointer transition-all">
+                            Selecionar Logo
+                            <input type="file" name="logo" class="hidden" accept="image/*">
+                        </label>
+                        {% if form.instance.logo %}
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-tight">Logo carregada
+                            ✓</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div
+                    class="flex justify-center p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200 min-h-[120px] items-center">
+                    {% if form.instance.logo %}
+                    <img src="{{ form.instance.logo.url }}" alt="Logo Atual"
+                        class="max-h-24 max-w-full object-contain shadow-sm">
+                    {% else %}
+                    <div class="text-center">
+                        <span class="text-3xl grayscale opacity-30">🖼️</span>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mt-2">Prévia da Logo</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Dados Cadastrais -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
+            <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Dados da Razão Social /
+                Identificação</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.nome_fantasia.label }}
+                    </label>
+                    {{ form.nome_fantasia }}
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.razao_social.label }}
+                    </label>
+                    {{ form.razao_social }}
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.cnpj_cpf.label }}
+                    </label>
+                    {{ form.cnpj_cpf }}
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.endereco.label }}
+                    </label>
+                    {{ form.endereco }}
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.email.label }}
+                    </label>
+                    {{ form.email }}
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.telefone.label }}
+                    </label>
+                    {{ form.telefone }}
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1">
+                        {{ form.inscricao_estadual.label }}
+                    </label>
+                    {{ form.inscricao_estadual }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex justify-end gap-3 pt-4">
+            <a href="{% url 'dashboard:painel' %}"
+                class="px-6 py-2 bg-white border border-gray-300 rounded-xl text-xs font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all">Cancelar</a>
+            <button type="submit"
+                class="px-10 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">Salvar
+                Configurações</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    input:not([type="checkbox"]):not([type="file"]),
+    select {
+        width: 100%;
+        border-radius: 0.75rem;
+        border: 1px solid #e5e7eb;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.2s;
+        background-color: #fcfcfc;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        background-color: #fff;
+    }
+</style>
+{% endblock %}

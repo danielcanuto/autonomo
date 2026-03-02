@@ -2,8 +2,25 @@
 
 {% block content %}
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-    <p class="mt-2 text-sm text-gray-600">Visão geral da sua agenda de eventos e pagamentos pendentes.</p>
+    <h1 class="text-3xl font-black text-gray-900 tracking-tight">Painel de Controle</h1>
+    <p class="mt-1 text-sm text-gray-500 font-medium tracking-wide italic">Benvindo de volta! Aqui está o resumo do seu
+        negócio.</p>
+</div>
+
+<!-- Cards Financeiros Rápidos -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-indigo-600 rounded-2xl shadow-lg p-6 text-white">
+        <p class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Saldo em Caixa</p>
+        <p class="text-3xl font-black">R$ {{ saldo|floatformat:2 }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Entradas (Total)</p>
+        <p class="text-2xl font-bold text-green-600">R$ {{ total_entrada|floatformat:2 }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Saídas (Total)</p>
+        <p class="text-2xl font-bold text-red-500">R$ {{ total_saida|floatformat:2 }}</p>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
@@ -19,7 +36,7 @@
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between items-start">
                         <p class="text-sm font-semibold text-gray-900">
-                            <a href="{% url 'admin:contratos_contrato_change' evento.id %}"
+                            <a href="{% url 'contratos:contrato_update' evento.id %}"
                                 class="hover:text-indigo-600 hover:underline">
                                 {{ evento.cliente.nome }}
                             </a>
@@ -35,20 +52,16 @@
                     </p>
                     <div class="mt-2 flex items-center justify-between text-xs">
                         <span class="text-gray-500">Contrato #{{ evento.id }}</span>
-                        Pagamento: <span
-                            class="font-medium {% if evento.status_pagamento == 'PAGO' %}text-green-600{% elif evento.status_pagamento == 'PENDENTE' %}text-orange-600{% else %}text-gray-600{% endif %} ml-1">{{
-                            evento.get_status_pagamento_display }}</span>
+                        Pagamento:
+                        <span
+                            class="font-medium {% if evento.status_pagamento == 'PAGO' %}text-green-600{% elif evento.status_pagamento == 'PENDENTE' %}text-orange-600{% else %}text-gray-600{% endif %} ml-1">
+                            {{ evento.get_status_pagamento_display }}
+                        </span>
                     </div>
                 </div>
             </li>
             {% empty %}
             <li class="p-8 text-sm text-gray-500 text-center flex flex-col items-center justify-center h-full">
-                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                    </path>
-                </svg>
                 Nenhum evento agendado.
             </li>
             {% endfor %}
@@ -66,7 +79,7 @@
                 <div class="flex justify-between items-center">
                     <div class="flex flex-col">
                         <p class="text-sm font-semibold text-gray-900">
-                            <a href="{% url 'admin:contratos_contrato_change' pgto.id %}"
+                            <a href="{% url 'contratos:contrato_update' pgto.id %}"
                                 class="hover:text-orange-600 hover:underline">
                                 {{ pgto.cliente.nome }}
                             </a>
@@ -74,9 +87,14 @@
                         <p class="text-xs text-gray-500 mt-1">Data: {{ pgto.data_inicio|date:"d/m/Y" }}</p>
                     </div>
                     <div class="flex flex-col items-end">
-                        <span class="text-sm font-bold text-gray-900 mb-1">R$ {{ pgto.valor_final }}</span>
+                        <span class="text-sm font-bold text-gray-900">Total: R$ {{ pgto.valor_final }}</span>
+                        {% if pgto.saldo_restante > 0 %}
+                        <span class="text-xs font-bold text-red-600 mt-0.5">
+                            A receber: R$ {{ pgto.saldo_restante }}
+                        </span>
+                        {% endif %}
                         <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold {% if pgto.status_pagamento == 'PENDENTE' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            class="mt-1 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {% if pgto.status_pagamento == 'PENDENTE' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
                             {{ pgto.get_status_pagamento_display }}
                         </span>
                     </div>
@@ -84,31 +102,36 @@
             </li>
             {% empty %}
             <li class="p-8 text-sm text-gray-500 text-center flex flex-col items-center justify-center h-full">
-                <svg class="w-12 h-12 text-green-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
                 Todos os recebimentos estão em dia!
             </li>
             {% endfor %}
         </ul>
     </div>
-
 </div>
 
-<div class="mt-8 flex items-center gap-4">
+<div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <a href="{% url 'clientes:cliente_list' %}"
+        class="inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+        Gerenciar Clientes
+    </a>
+    <a href="{% url 'servicos:servico_list' %}"
+        class="inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+        Catálogo de Serviços
+    </a>
+    <a href="{% url 'contratos:contrato_list' %}"
+        class="inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+        Gerenciar Contratos
+    </a>
+    <a href="{% url 'financeiro:dashboard' %}"
+        class="inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+        Gestão Financeira
+    </a>
+</div>
+
+<div class="mt-4 flex items-center gap-4">
     <a href="{% url 'admin:index' %}"
-        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-            </path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-            </path>
-        </svg>
-        Acessar Painel Administrador
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+        Configurações Avançadas (Admin)
     </a>
 </div>
 {% endblock %}

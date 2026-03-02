@@ -1,0 +1,316 @@
+{% extends 'dashboard/base.html' %}
+{% load financeiro_filters %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">{{ titulo }}</h1>
+            <p class="mt-2 text-sm text-gray-600">Preencha os dados do orçamento.</p>
+        </div>
+        <a href="{% url 'orcamentos:orcamento_list' %}"
+            class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            &larr; Voltar
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Form -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+                <form method="POST" class="p-6 space-y-6">
+                    {% csrf_token %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Cliente -->
+                        <div class="col-span-2">
+                            <label for="{{ form.cliente.id_for_label }}"
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight mb-2">Cliente</label>
+                            <div class="flex gap-2">
+                                {{ form.cliente }}
+                                <a href="{% url 'clientes:cliente_create' %}"
+                                    class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-bold rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors">
+                                    + NOVO
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Serviços -->
+                        <div class="col-span-2">
+                            <label
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight mb-3">Seleção
+                                de Serviços</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Disponíveis -->
+                                <div class="border border-gray-100 rounded-xl p-4 bg-gray-50/50">
+                                    <h3 class="text-[9px] font-black uppercase text-gray-400 mb-3 tracking-widest">
+                                        Disponíveis</h3>
+                                    <input type="text" id="search-services" placeholder="Buscar serviços..."
+                                        class="w-full mb-3 rounded-lg border-gray-200 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    <div class="max-h-60 overflow-y-auto space-y-1 pr-2" id="available-list">
+                                        {% for s in all_servicos %}
+                                        <div class="service-item cursor-pointer p-3 bg-white hover:bg-indigo-50 border border-gray-100 rounded-lg flex justify-between items-center text-sm transition-all hover:shadow-sm"
+                                            data-id="{{ s.id }}" data-price="{{ s.preco_base }}"
+                                            data-name="{{ s.nome }}">
+                                            <span class="font-medium text-gray-700">{{ s.nome }}</span>
+                                            <span class="font-black text-indigo-600">R$ {{ s.preco_base }}</span>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- Selecionados -->
+                                <div
+                                    class="border border-indigo-100 rounded-xl p-4 bg-white shadow-sm ring-1 ring-indigo-50">
+                                    <h3 class="text-[9px] font-black uppercase text-indigo-400 mb-3 tracking-widest">No
+                                        Orçamento</h3>
+                                    <div class="max-h-60 overflow-y-auto space-y-2 pr-2" id="selected-list">
+                                        <!-- JS populate -->
+                                    </div>
+                                    <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+                                        <span
+                                            class="text-[9px] font-black text-gray-400 uppercase tracking-widest">SUBTOTAL:</span>
+                                        <span class="text-xl font-black text-indigo-600" id="services-total">R$
+                                            0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden">
+                                {{ form.servicos }}
+                            </div>
+                        </div>
+
+                        <!-- Valor Total -->
+                        <div class="space-y-1">
+                            <label for="{{ form.valor_total.id_for_label }}"
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight">Valor Total
+                                Acordado (R$)</label>
+                            {{ form.valor_total }}
+                            <p class="text-[9px] text-gray-400 italic">Você pode ajustar o valor final manualmente se
+                                desejar.</p>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="{{ form.data_validade.id_for_label }}"
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight">Validade do
+                                Orçamento</label>
+                            {{ form.data_validade }}
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="{{ form.status.id_for_label }}"
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight">Status</label>
+                            {{ form.status }}
+                        </div>
+
+                        <div class="col-span-2 space-y-1">
+                            <label for="{{ form.observacoes.id_for_label }}"
+                                class="block text-[10px] font-black text-gray-400 uppercase tracking-tight">Observações
+                                Internas</label>
+                            {{ form.observacoes }}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-gray-100 flex justify-end gap-3">
+                        <button type="submit"
+                            class="px-8 py-3 bg-indigo-600 border border-transparent rounded-xl shadow-lg shadow-indigo-200 text-sm font-black text-white hover:bg-indigo-700 transition-all active:scale-95 uppercase tracking-widest">
+                            Salvar Orçamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sidebar: Payments -->
+        <div class="space-y-6">
+            {% if form.instance.pk %}
+            <div class="bg-white shadow-sm border border-gray-200 rounded-xl p-6 space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">Financeiro</h3>
+                    <p class="text-[10px] text-gray-400 uppercase font-black tracking-tight">Gestão de Sinais e Reservas
+                    </p>
+                </div>
+
+                <!-- Resumo Financeiro -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <span class="text-[9px] font-black text-green-400 uppercase block mb-1">Total Pago</span>
+                        <div class="text-xl font-black text-green-600">R$ {{
+                            form.instance.pagamentos.all|sum_total_valor|default:"0.00" }}</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <span class="text-[9px] font-black text-gray-400 uppercase block mb-1">Restante</span>
+                        <div class="text-xl font-bold text-gray-600">R$ {{
+                            form.instance.valor_total|subtract:form.instance.pagamentos.all|sum_total_valor|default:"0.00"
+                            }}</div>
+                    </div>
+                </div>
+
+                <!-- Registrar Sinal -->
+                <div class="pt-6 border-t border-gray-100">
+                    <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Registrar Sinal</h4>
+                    <form action="{% url 'orcamentos:orcamento_pagamento_create' form.instance.pk %}" method="POST"
+                        class="space-y-3">
+                        {% csrf_token %}
+                        <div>
+                            <input type="number" name="valor" step="0.01" placeholder="Valor do Sinal (R$)" required
+                                class="w-full rounded-lg border-gray-200 text-sm focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div class="grid grid-cols-1 gap-2">
+                            <select name="metodo" class="w-full rounded-lg border-gray-200 text-sm">
+                                <option value="PIX">PIX</option>
+                                <option value="DINHEIRO">Dinheiro</option>
+                                <option value="CARTAO_CREDITO">Cartão de Crédito</option>
+                                <option value="TRANSFERENCIA">Transferência</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-2 bg-green-600 text-white rounded-lg text-xs font-black uppercase tracking-widest hover:bg-green-700 transition-colors shadow-lg shadow-green-100">
+                            Lançar no Caixa
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Histórico de Pagamentos -->
+                <div class="pt-6 border-t border-gray-100">
+                    <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Histórico</h4>
+                    <div class="space-y-2">
+                        {% for pgto in form.instance.pagamentos.all %}
+                        <div
+                            class="flex justify-between items-center p-3 bg-gray-50 rounded-lg text-xs border border-gray-100">
+                            <div>
+                                <div class="font-bold text-gray-800">R$ {{ pgto.valor }}</div>
+                                <div class="text-[9px] text-gray-500">{{ pgto.get_metodo_display }} - {{
+                                    pgto.data_pagamento|date:"d/m/Y" }}</div>
+                            </div>
+                            <span
+                                class="text-[8px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold uppercase">Confirmado</span>
+                        </div>
+                        {% empty %}
+                        <p class="text-center py-4 text-xs text-gray-400 italic">Nenhum sinal registrado.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Botão de Fichamento -->
+                {% if form.instance.status != 'APROVADO' %}
+                <div class="pt-6">
+                    <a href="{% url 'orcamentos:converter_em_contrato' form.instance.pk %}"
+                        class="flex items-center justify-center gap-2 w-full py-4 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-100 transition-all border-2 border-dashed border-indigo-200 border-spacing-4">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Converter em Contrato
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center">
+                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <p class="text-xs font-bold text-indigo-700">Salve o orçamento primeiro para habilitar o registro de
+                    pagamentos e sinais.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const availableItems = document.querySelectorAll('#available-list .service-item');
+        const selectedList = document.getElementById('selected-list');
+        const selectField = document.getElementById('{{ form.servicos.id_for_label }}');
+        const totalDisplay = document.getElementById('services-total');
+        const valorTotalInput = document.getElementById('{{ form.valor_total.id_for_label }}');
+        const searchInput = document.getElementById('search-services');
+
+        let selectedServices = [];
+
+        // Initialize from hidden select (for edit mode)
+        Array.from(selectField.selectedOptions).forEach(opt => {
+            const item = Array.from(availableItems).find(i => i.dataset.id == opt.value);
+            if (item) {
+                selectedServices.push({
+                    id: item.dataset.id,
+                    name: item.dataset.name,
+                    price: item.dataset.price
+                });
+            }
+        });
+
+        function updateUI() {
+            selectedList.innerHTML = '';
+            let total = 0;
+
+            // Clear select
+            Array.from(selectField.options).forEach(opt => opt.selected = false);
+
+            selectedServices.forEach(s => {
+                total += parseFloat(s.price);
+
+                // Update hidden select
+                const opt = Array.from(selectField.options).find(o => o.value == s.id);
+                if (opt) opt.selected = true;
+
+                const div = document.createElement('div');
+                div.className = 'p-2 bg-indigo-50 rounded flex justify-between items-center text-sm mb-1';
+                div.innerHTML = `
+                <span>${s.name}</span>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-indigo-700">R$ ${parseFloat(s.price).toFixed(2)}</span>
+                    <button type="button" class="remove-btn text-red-500 hover:text-red-700" data-id="${s.id}">
+                        &times;
+                    </button>
+                </div>
+            `;
+                selectedList.appendChild(div);
+            });
+
+            totalDisplay.innerText = `R$ ${total.toFixed(2)}`;
+
+            // Update valor_total if it's currently 0 or empty
+            if (!valorTotalInput.value || parseFloat(valorTotalInput.value) === 0) {
+                valorTotalInput.value = total.toFixed(2);
+            }
+        }
+
+        availableItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (!selectedServices.find(s => s.id === item.dataset.id)) {
+                    selectedServices.push({
+                        id: item.dataset.id,
+                        name: item.dataset.name,
+                        price: item.dataset.price
+                    });
+                    updateUI();
+                }
+            });
+        });
+
+        selectedList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.remove-btn');
+            if (btn) {
+                selectedServices = selectedServices.filter(s => s.id !== btn.dataset.id);
+                updateUI();
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            availableItems.forEach(item => {
+                const name = item.dataset.name.toLowerCase();
+                item.style.display = name.includes(term) ? 'flex' : 'none';
+            });
+        });
+
+        updateUI();
+    });
+</script>
+{% endblock %}

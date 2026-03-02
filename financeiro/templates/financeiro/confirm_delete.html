@@ -1,0 +1,29 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-xl mx-auto py-12">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden text-center">
+        <div class="p-8">
+            <div
+                class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">
+                ⚠️
+            </div>
+            <h1 class="text-2xl font-extrabold text-gray-900 mb-2">Confirmar Exclusão</h1>
+            <p class="text-gray-500 mb-8">Você tem certeza que deseja excluir <strong>{{ objeto }}</strong>? Esta ação
+                não pode ser desfeita.</p>
+
+            <form method="post" class="flex flex-col gap-3">
+                {% csrf_token %}
+                <button type="submit"
+                    class="w-full py-3 bg-red-600 text-white rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-red-700 transition-all shadow-lg shadow-red-100">
+                    Sim, Excluir Definitivamente
+                </button>
+                <a href="{% url voltar %}"
+                    class="w-full py-3 bg-gray-50 text-gray-600 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-gray-100 transition-all">
+                    Não, Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+ID,Categoria,Nome,Preço Base (R$),Ativo
+7,Eventos,Casamento - Pacote I,780.00,Sim
+8,Eventos,Casamento - Pacote II,1080.00,Sim
+9,Eventos,Casamento - Pacote III,1230.00,Sim
+2,Eventos,Festa Infantil - Pacote I,520.00,Sim
+3,Eventos,Festa Infantil - Pacote II,720.00,Sim
+4,Eventos,Festa infantil - Pacote III,820.00,Sim
+6,Tempo de Festa,Hora Extra Notorno,90.00,Sim
+5,Tempo de Festa,Hora Extra ate as 21h,60.00,Sim

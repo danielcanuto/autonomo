@@ -1,0 +1,72 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Fornecedores</h1>
+            <p class="text-sm text-gray-500 font-medium mt-1">Gestão de parceiros e serviços terceirizados</p>
+        </div>
+        <a href="{% url 'financeiro:fornecedor_create' %}"
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-md">
+            + Novo Fornecedor
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-100">
+            <thead class="bg-gray-50/50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Fornecedor</th>
+                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Categoria</th>
+                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Contato</th>
+                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Status</th>
+                    <th class="px-6 py-3 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for f in fornecedores %}
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-bold text-gray-900">{{ f.nome }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ f.get_categoria_display }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ f.contato|default:"-" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if f.ativo %}
+                        <span
+                            class="px-2 py-1 text-[10px] font-bold rounded-full bg-green-100 text-green-700 uppercase">Ativo</span>
+                        {% else %}
+                        <span
+                            class="px-2 py-1 text-[10px] font-bold rounded-full bg-gray-100 text-gray-400 uppercase">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-3 text-xs font-bold uppercase tracking-widest">
+                            <a href="{% url 'financeiro:fornecedor_update' f.pk %}"
+                                class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                            <a href="{% url 'financeiro:fornecedor_delete' f.pk %}"
+                                class="text-red-500 hover:text-red-700">Excluir</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">Nenhum fornecedor cadastrado.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

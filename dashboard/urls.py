@@ -5,5 +5,5 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('', views.landing_page, name='landing'),
-    path('painel/', views.index, name='index'),
+    path('painel/', views.index, name='painel'),
 ]

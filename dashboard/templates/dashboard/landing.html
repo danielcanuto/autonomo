@@ -73,9 +73,9 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <a href="{% url 'admin:login' %}"
+                    <a href="{% url 'login' %}"
                         class="hidden md:inline-flex text-gray-700 hover:text-brand-600 font-medium transition-colors">Entrar</a>
-                    <a href="{% url 'admin:login' %}"
+                    <a href="{% url 'login' %}"
                         class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full text-white bg-gray-900 hover:bg-brand-600 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
                         Acessar Sistema
                     </a>
@@ -113,7 +113,7 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{% url 'admin:login' %}"
+                <a href="{% url 'login' %}"
                     class="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-brand-600 hover:bg-brand-700 shadow-xl hover:shadow-2xl hover:shadow-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
                     Comece Agora
                     <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
@@ -145,45 +145,45 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Feature 1 -->
+                <!-- Feature 1: Vendas -->
                 <div
                     class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
                     <div
                         class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-users text-2xl text-brand-500"></i>
+                        <i class="fas fa-hand-holding-usd text-2xl text-brand-500"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Gestão de Clientes</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Vendas e Contratos</h3>
                     <p class="text-gray-600 leading-relaxed">
-                        Tenha o histórico completo de cada cliente na palma da mão. Contatos, contratos passados e
-                        observações personalizadas.
+                        Gerencie todo o ciclo de venda: do orçamento personalizado ao contrato finalizado. Vincule
+                        serviços e envie propostas elegantes em poucos cliques.
                     </p>
                 </div>
 
-                <!-- Feature 2 -->
+                <!-- Feature 2: Gerencial -->
                 <div
                     class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
                     <div
                         class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-file-signature text-2xl text-brand-500"></i>
+                        <i class="fas fa-project-diagram text-2xl text-brand-500"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Contratos Inteligentes</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Gestão de Equipe</h3>
                     <p class="text-gray-600 leading-relaxed">
-                        Vincule serviços facilmente. Acompanhe se o contrato está ativo, finalizado ou com pagamentos
-                        pendentes em tempo real.
+                        Controle total sobre colaboradores e fornecedores parceiros. Defina permissões de acesso (Admin,
+                        Gestor, Vendedor) para segurança total dos seus dados.
                     </p>
                 </div>
 
-                <!-- Feature 3 -->
+                <!-- Feature 3: Financeiro/MEI -->
                 <div
                     class="p-8 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-colors duration-300 border border-gray-100 group">
                     <div
                         class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-calendar-check text-2xl text-brand-500"></i>
+                        <i class="fas fa-chart-line text-2xl text-brand-500"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Agenda Dinâmica</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Relatório Mensal MEI</h3>
                     <p class="text-gray-600 leading-relaxed">
-                        Nunca mais perca um agendamento. Seu painel principal exibe os próximos eventos de forma clara e
-                        interativa.
+                        Simplifique sua declaração anual. Gere relatórios mensais de rendimentos brutas separando
+                        Serviços de Produtos, otimizados para o padrão do MEI.
                     </p>
                 </div>
             </div>
@@ -200,7 +200,7 @@
             <p class="text-xl text-brand-100 mb-10">
                 Junte-se ao sistema desenhado exclusivamente para profissionais autônomos exigentes.
             </p>
-            <a href="{% url 'admin:login' %}"
+            <a href="{% url 'login' %}"
                 class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold rounded-full text-brand-900 bg-white hover:bg-gray-100 shadow-xl transition-all duration-300 transform hover:scale-105">
                 Acessar meu Painel
                 <i class="fas fa-sign-in-alt ml-2"></i>

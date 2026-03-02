@@ -1,0 +1,102 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Fluxo de Caixa</h1>
+        <div class="flex gap-3">
+            <a href="{% url 'financeiro:fornecedor_list' %}"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-xl text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 transition-all shadow-sm">
+                Gerir Fornecedores
+            </a>
+            <a href="{% url 'financeiro:custo_create' %}"
+                class="inline-flex items-center px-4 py-2 border border-transparent rounded-xl text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-all shadow-md">
+                Nova Despesa
+            </a>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Saldo Atual</p>
+            <p class="text-3xl font-black {% if saldo >= 0 %}text-indigo-600{% else %}text-red-600{% endif %}">
+                R$ {{ saldo|floatformat:2 }}
+            </p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Entradas</p>
+            <p class="text-2xl font-bold text-green-600">R$ {{ total_entrada|floatformat:2 }}</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Saídas</p>
+            <p class="text-2xl font-bold text-red-500">R$ {{ total_saida|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <!-- Tabela de Movimentações -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+            <h2 class="text-lg font-bold text-gray-800">Últimas Movimentações</h2>
+            <span class="text-xs text-gray-400 font-medium italic">Histórico consolidado</span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-100">
+                <thead>
+                    <tr class="bg-gray-50/30">
+                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            Data</th>
+                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            Descrição</th>
+                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            Categoria</th>
+                        <th class="px-6 py-3 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            Valor</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% for m in movimentacoes %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">{{ m.data|date:"d/m/Y"
+                            }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <span
+                                    class="p-1.5 rounded-lg mr-3 {% if m.tipo == 'ENTRADA' %}bg-green-100 text-green-600{% else %}bg-red-100 text-red-600{% endif %}">
+                                    {% if m.tipo == 'ENTRADA' %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                    </svg>
+                                    {% else %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                    </svg>
+                                    {% endif %}
+                                </span>
+                                <span class="text-sm font-bold text-gray-900">{{ m.descricao }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                class="px-2 py-1 text-[10px] font-bold rounded-full bg-gray-100 text-gray-600 uppercase">{{
+                                m.get_categoria_display }}</span>
+                        </td>
+                        <td
+                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-black {% if m.tipo == 'ENTRADA' %}text-green-600{% else %}text-red-600{% endif %}">
+                            {{ m.tipo|slice:":1" }} R$ {{ m.valor }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">Nenhuma movimentação
+                            registrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

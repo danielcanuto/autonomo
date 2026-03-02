@@ -1,40 +1,64 @@
-# Autônomo - Sistema de Controle de Clientes e Contratos
+# Autônomo Pro - ERP para Profissionais Autônomos e MEI
 
-Um sistema web em Django desenvolvido para gerenciar clientes e contratos, criado inicialmente para fotógrafos, mas estruturado de forma flexível para atender qualquer trabalhador autônomo.
+O **Autônomo Pro** é uma plataforma de gestão inteligente desenvolvida em Django, projetada para simplificar a vida do profissional autônomo. O sistema centraliza desde o primeiro contato com o cliente até a entrega do contrato e a declaração de rendimentos para o MEI.
 
-## Funcionalidades Planejadas
+## 🚀 Funcionalidades Principais
 
-- **Gestão de Clientes:** Cadastro completo com nome, e-mail, telefone, CPF/CNPJ e endereço.
-- **Catálogo de Serviços:** Criação de categorias e listagem de serviços oferecidos pelo profissional, com valores base.
-- **Gestão de Contratos:** Vinculação de um cliente a um serviço, com definição de valor final, datas de vigência e status do contrato (Rascunho, Ativo, Concluído, Cancelado).
+### 💰 Ciclo de Vendas (Vendas)
+- **Gestão de Clientes**: Cadastro completo com histórico de interações e documentos vinculados.
+- **Catálogo de Serviços**: Defina seus serviços com preços base e templates de orçamento.
+- **Orçamentos & Propostas**: Gere orçamentos dinâmicos com substituição automática de variáveis.
+- **Controle de Contratos**: Transforme orçamentos em contratos ativos com gestão de status e datas.
 
-## Como executar o projeto localmente
+### ⚙️ Gestão Administrativa (Gerencial)
+- **Gestão de Equipe**: Controle de colaboradores com diferentes níveis de acesso (Admin, Gestor, Vendedor, Operador).
+- **Parceiros e Fornecedores**: Cadastro de fornecedores para vinculação de custos e insumos.
+- **Identidade Visual**: Personalização completa com logo da empresa e dados da Razão Social ou perfil autônomo (CPF).
 
-1. Crie e ative um ambiente virtual:
+### 📊 Financeiro e Relatórios
+- **Fluxo de Caixa**: Registro automático de entradas (pagamentos) e saídas (custos).
+- **Relatório de Rendimentos MEI**: Relatório mensal automatizado que separa receitas de Serviços e Produtos, facilitando a declaração anual (DASN-SIMEI).
+
+## 🛠️ Tecnologias Utilizadas
+- **Backend**: Python 3 / Django 5
+- **Frontend**: HTML5 / Tailwind CSS (v3) / FontAwesome 6
+- **Interatividade**: HTMX
+- **Banco de Dados**: SQLite (Desenvolvimento) / PostgreSQL (Recomendado para Produção)
+
+## 📁 Estrutura do Projeto
+- `autonomo`: Pasta de configurações globais do projeto Django.
+- `nucleo`: Gestão de usuários customizados, permissões e configurações de identidade da empresa.
+- `clientes`: Módulo de CRM para gestão de clientes.
+- `servicos`: Catálogo de serviços e categorias.
+- `orcamentos`: Geração de propostas e fluxos de aprovação.
+- `contratos`: Gestão de acordos e vigências.
+- `financeiro`: Fluxo de caixa, gestão de fornecedores e relatórios MEI.
+- `dashboard`: Painel principal e landing page do sistema.
+
+## ⚙️ Instalação Local
+
+1.  **Clone o repositório**
+2.  **Crie e ative um ambiente virtual:**
     ```bash
     python3 -m venv venv
-    source venv/bin/activate
+    source venv/bin/activate  # (Windows: venv\Scripts\activate)
     ```
-2. Instale as dependências:
+3.  **Instale as dependências:**
     ```bash
     pip install -r requirements.txt
     ```
-3. Execute as migrações do banco de dados:
+4.  **Execute as migrações:**
     ```bash
     python manage.py migrate
     ```
-4. Crie um superusuário para acessar o painel administrativo:
+5.  **Crie seu acesso administrativo:**
     ```bash
     python manage.py createsuperuser
     ```
-5. Inicie o servidor:
+6.  **Inicie o servidor:**
     ```bash
     python manage.py runserver
     ```
 
-## Estrutura do Projeto
-
-- `nucleo`: App central responsável pelo modelo base de usuário e configurações gerais.
-- `clientes`: Módulo dedicado à gestão das informações dos clientes.
-- `servicos`: Módulo para gerenciar o catálogo de categorias e serviços.
-- `contratos`: Módulo para gerir os acordos de prestação de serviços entre o autônomo e o cliente.
+---
+*Desenvolvido em conformidade com as necessidades de fotógrafos, pintores, consultores e diversos profissionais prestadores de serviço.*

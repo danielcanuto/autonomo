@@ -1,0 +1,435 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">{{ titulo }}</h1>
+        <a href="{% url 'contratos:contrato_list' %}"
+            class="text-sm font-medium text-gray-600 hover:text-indigo-600">&larr; Voltar para lista</a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Coluna da Esquerda: Formulário Principal -->
+        <div class="lg:col-span-2">
+            <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+                <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                        <p class="font-bold mb-2">Por favor, corrija os seguintes erros:</p>
+                        <ul class="list-disc list-inside">
+                            {% for field, errors in form.errors.items %}
+                            <li><strong>{{ field }}:</strong> {{ errors.0 }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Cliente -->
+                        <div class="col-span-2">
+                            <label for="{{ form.cliente.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Cliente</label>
+                            <div class="flex gap-2">
+                                {{ form.cliente }}
+                                <a href="{% url 'clientes:cliente_create' %}"
+                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">+
+                                    Novo Cliente</a>
+                            </div>
+                            {% if form.cliente.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.cliente.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Serviços -->
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Seleção de Serviços
+                                (Orçamento)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Disponíveis -->
+                                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                    <h3 class="text-xs font-bold uppercase text-gray-500 mb-3">Serviços Disponíveis</h3>
+                                    <input type="text" id="search-services" placeholder="Buscar serviço..."
+                                        class="w-full mb-3 rounded-md border-gray-300 text-sm">
+                                    <div class="max-h-60 overflow-y-auto space-y-1" id="available-list">
+                                        {% for s in all_servicos %}
+                                        <div class="service-item cursor-pointer p-2 hover:bg-indigo-50 rounded flex justify-between items-center text-sm border border-transparent hover:border-indigo-200"
+                                            data-id="{{ s.id }}" data-price="{{ s.preco_base }}"
+                                            data-name="{{ s.nome }}">
+                                            <span>{{ s.nome }}</span>
+                                            <span class="font-bold text-indigo-600">R$ {{ s.preco_base }}</span>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- Selecionados -->
+                                <div class="border border-indigo-200 rounded-lg p-4 bg-white">
+                                    <h3 class="text-xs font-bold uppercase text-indigo-500 mb-3">Serviços no Contrato
+                                    </h3>
+                                    <div class="max-h-60 overflow-y-auto space-y-1" id="selected-list"></div>
+                                    <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                                        <span class="text-xs font-bold text-gray-500">TOTAL ESTIMADO:</span>
+                                        <span class="text-lg font-bold text-indigo-600" id="services-total">R$
+                                            0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden">{{ form.servicos }}</div>
+                            {% if form.servicos.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.servicos.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Cálculo de Preço -->
+                        <div class="col-span-2 bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-4">
+                            <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cálculo de Preço
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="{{ form.valor_bruto.id_for_label }}"
+                                        class="block text-xs font-bold text-gray-500 mb-1">Valor Bruto
+                                        (Serviços)</label>
+                                    {{ form.valor_bruto }}
+                                </div>
+                                <div>
+                                    <label for="{{ form.tipo_desconto.id_for_label }}"
+                                        class="block text-xs font-bold text-gray-500 mb-1">Tipo Desconto</label>
+                                    {{ form.tipo_desconto }}
+                                </div>
+                                <div>
+                                    <label for="{{ form.valor_desconto.id_for_label }}"
+                                        class="block text-xs font-bold text-gray-500 mb-1">Valor Desconto</label>
+                                    {{ form.valor_desconto }}
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-t border-gray-200 flex justify-between items-center">
+                                <label for="{{ form.valor_final.id_for_label }}"
+                                    class="text-sm font-black text-gray-700">VALOR FINAL ACORDADO (R$):</label>
+                                <div class="w-48">
+                                    {{ form.valor_final }}
+                                    {% if form.valor_final.errors %}
+                                    <p class="mt-1 text-[10px] text-red-600 font-bold text-right">{{
+                                        form.valor_final.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.valor_entrada.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Valor da Entrada (R$)</label>
+                            {{ form.valor_entrada }}
+                            {% if form.valor_entrada.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.valor_entrada.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Datas -->
+                        <div>
+                            <label for="{{ form.data_inicio.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Data do Contrato</label>
+                            {{ form.data_inicio }}
+                            {% if form.data_inicio.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.data_inicio.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.data_hora_evento.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Data e Hora do Evento</label>
+                            {{ form.data_hora_evento }}
+                            {% if form.data_hora_evento.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.data_hora_evento.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.status.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Status do Contrato</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.status.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.status_pagamento.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Condição de Pagamento</label>
+                            {{ form.status_pagamento }}
+                            {% if form.status_pagamento.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.status_pagamento.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.condicao_pagamento.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Forma de Pagamento</label>
+                            {{ form.condicao_pagamento }}
+                            {% if form.condicao_pagamento.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.condicao_pagamento.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-span-2">
+                            <label for="{{ form.data_fim.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Data de Término (Opcional)</label>
+                            {{ form.data_fim }}
+                            {% if form.data_fim.errors %}
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ form.data_fim.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-span-2">
+                            <label for="{{ form.arquivo_contrato.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Contrato Assinado (Opcional)</label>
+                            {{ form.arquivo_contrato }}
+                            {% if form.instance.arquivo_contrato %}
+                            <p class="mt-2 text-xs text-gray-500">Arquivo: <a
+                                    href="{{ form.instance.arquivo_contrato.url }}"
+                                    class="text-indigo-600 hover:underline" target="_blank">Ver original</a></p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-span-2">
+                            <label for="{{ form.termos.id_for_label }}"
+                                class="block text-sm font-medium text-gray-700">Observações e Termos</label>
+                            {{ form.termos }}
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-200 flex justify-end gap-3">
+                        <a href="{% url 'contratos:contrato_list' %}"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</a>
+                        <button type="submit"
+                            class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700">Salvar
+                            Contrato</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Coluna da Direita: Financeiro e Pagamentos -->
+        <div class="lg:col-span-1 space-y-6">
+            {% if form.instance.pk %}
+            <!-- Ações Rápidas -->
+            <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-5">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-3">Ações Rápidas</h3>
+                <div class="grid grid-cols-1 gap-2">
+                    {% if contrato.status != 'CONCLUIDO' %}
+                    <form method="POST" action="{% url 'contratos:finalizar_contrato' contrato.id %}">
+                        {% csrf_token %}
+                        <!-- Mantendo outros campos necessários para não quebrar a validação se houver -->
+                        <button type="submit"
+                            class="w-full py-2 bg-green-600 text-white rounded-md text-xs font-bold hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Finalizar Evento/Festa
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Resumo Financeiro -->
+            <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-5">
+                <h3 class="text-sm font-bold text-gray-900 uppercase mb-4 border-b pb-2">Resumo Financeiro</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Total do Contrato:</span>
+                        <span class="font-bold text-gray-900">R$ {{ contrato.valor_final }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Total Pago:</span>
+                        <span class="font-bold text-green-600">R$ {{ contrato.valor_pago }}</span>
+                    </div>
+                    <div class="pt-2 border-t flex justify-between items-center">
+                        <span class="text-sm font-bold text-gray-700">SALDO DEVEDOR:</span>
+                        <span
+                            class="text-xl font-black {% if contrato.saldo_restante > 0 %}text-red-600{% else %}text-green-600{% endif %}">
+                            R$ {{ contrato.saldo_restante }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registrar Novo Pagamento -->
+            <div class="bg-indigo-50 shadow-sm border border-indigo-100 rounded-lg p-5">
+                <h3 class="text-sm font-bold text-indigo-900 uppercase mb-4">Registrar Pagamento</h3>
+                <form action="{% url 'contratos:registrar_pagamento' contrato.id %}" method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-700 mb-1">Valor (R$)</label>
+                        {{ pagamento_form.valor }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-700 mb-1">Data</label>
+                        {{ pagamento_form.data_pagamento }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-700 mb-1">Método</label>
+                        {{ pagamento_form.metodo }}
+                    </div>
+                    <div>
+                        {{ pagamento_form.observacao }}
+                    </div>
+                    <button type="submit"
+                        class="w-full py-2 bg-indigo-600 text-white rounded-md text-sm font-bold hover:bg-indigo-700 transition-colors">Confirmar
+                        Recebimento</button>
+                </form>
+            </div>
+
+            <!-- Histórico de Pagamentos -->
+            <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+                <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                    <h3 class="text-xs font-bold text-gray-700 uppercase">Histórico</h3>
+                </div>
+                <div class="max-h-60 overflow-y-auto divide-y divide-gray-100">
+                    <div class="p-3 bg-green-50/50">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-bold text-gray-700">Entrada Inicial</span>
+                            <span class="text-gray-500">{{ contrato.data_inicio|date:"d/m/Y" }}</span>
+                        </div>
+                        <span class="text-sm font-bold text-green-700">R$ {{ contrato.valor_entrada }}</span>
+                    </div>
+                    {% for p in historico_pagamentos %}
+                    <div class="p-3">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-bold text-gray-700">{{ p.get_metodo_display }}</span>
+                            <span class="text-gray-500">{{ p.data_pagamento|date:"d/m/Y" }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-gray-900">R$ {{ p.valor }}</span>
+                            {% if p.observacao %}
+                            <span class="text-[10px] text-gray-400 italic">"{{ p.observacao }}"</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-10 text-center">
+                <p class="text-xs text-gray-500">Salve o contrato para ativar as funções financeiras e registro de
+                    pagamentos.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const availableItems = document.querySelectorAll('#available-list .service-item');
+        const selectedList = document.getElementById('selected-list');
+        const selectField = document.getElementById('{{ form.servicos.id_for_label }}');
+        const totalDisplay = document.getElementById('services-total');
+        const valorFinalInput = document.getElementById('{{ form.valor_final.id_for_label }}');
+        const searchInput = document.getElementById('search-services');
+
+        let selectedServices = [];
+
+        // Initialize from hidden select (for edit mode)
+        Array.from(selectField.selectedOptions).forEach(opt => {
+            const item = Array.from(availableItems).find(i => i.dataset.id == opt.value);
+            if (item) {
+                selectedServices.push({
+                    id: item.dataset.id,
+                    name: item.dataset.name,
+                    price: item.dataset.price
+                });
+            }
+        });
+
+        const valorBrutoInput = document.getElementById('{{ form.valor_bruto.id_for_label }}');
+        const tipoDescontoSelect = document.getElementById('{{ form.tipo_desconto.id_for_label }}');
+        const valorDescontoInput = document.getElementById('{{ form.valor_desconto.id_for_label }}');
+
+        function updateUI() {
+            selectedList.innerHTML = '';
+            let bruto = 0;
+
+            // Clear select
+            Array.from(selectField.options).forEach(opt => opt.selected = false);
+
+            selectedServices.forEach(s => {
+                bruto += parseFloat(s.price);
+
+                // Update hidden select
+                const opt = Array.from(selectField.options).find(o => o.value == s.id);
+                if (opt) opt.selected = true;
+
+                const div = document.createElement('div');
+                div.className = 'p-2 bg-indigo-50 rounded flex justify-between items-center text-sm mb-1';
+                div.innerHTML = `
+                <span>${s.name}</span>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-indigo-700">R$ ${parseFloat(s.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                    <button type="button" class="remove-btn text-red-500 hover:text-red-700" data-id="${s.id}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            `;
+                selectedList.appendChild(div);
+            });
+
+            totalDisplay.innerText = `R$ ${bruto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            valorBrutoInput.value = bruto.toFixed(2);
+
+            // Calcular Desconto e Valor Final
+            let desconto = parseFloat(valorDescontoInput.value) || 0;
+            let final = bruto;
+
+            if (tipoDescontoSelect.value === 'PERCENTUAL') {
+                final = bruto - (bruto * (desconto / 100));
+            } else {
+                final = bruto - desconto;
+            }
+
+            valorFinalInput.value = final.toFixed(2);
+        }
+
+        // Event listeners para campos de desconto
+        valorDescontoInput.addEventListener('input', updateUI);
+        tipoDescontoSelect.addEventListener('change', updateUI);
+
+        function addService(id, name, price) {
+            if (!selectedServices.find(s => s.id === id)) {
+                selectedServices.push({ id, name, price });
+                updateUI();
+            }
+        }
+
+        availableItems.forEach(item => {
+            item.addEventListener('click', () => {
+                addService(item.dataset.id, item.dataset.name, item.dataset.price);
+            });
+
+            item.addEventListener('dblclick', () => {
+                addService(item.dataset.id, item.dataset.name, item.dataset.price);
+            });
+        });
+
+        selectedList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.remove-btn');
+            if (btn) {
+                selectedServices = selectedServices.filter(s => s.id !== btn.dataset.id);
+                updateUI();
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            availableItems.forEach(item => {
+                const name = item.dataset.name.toLowerCase();
+                item.style.display = name.includes(term) ? 'flex' : 'none';
+            });
+        });
+
+        updateUI();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'dashboard/base.html' %}
+{% load financeiro_filters %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header de Ações -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Orçamento #{{ orcamento.id }}</h1>
+            <p class="text-sm text-gray-500">Criado em {{ orcamento.data_criacao|date:"d/m/Y" }}</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'orcamentos:orcamento_list' %}"
+                class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                Voltar
+            </a>
+            <a href="{% url 'orcamentos:orcamento_update' orcamento.pk %}"
+                class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition-colors">
+                Editar
+            </a>
+            {% if orcamento.status != 'APROVADO' %}
+            <a href="{% url 'orcamentos:converter_em_contrato' orcamento.pk %}"
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                Gerar Contrato
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Coluna Principal (Conteúdo) -->
+        <div class="md:col-span-2 space-y-6">
+            <!-- Card Cliente -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Informações do Cliente
+                </h3>
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-xl">
+                        {{ orcamento.cliente.nome|slice:":1" }}
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-gray-900">{{ orcamento.cliente.nome }}</div>
+                        <div class="text-sm text-gray-500">{{ orcamento.cliente.email|default:"Sem e-mail" }}</div>
+                        <div class="text-sm text-gray-500">{{ orcamento.cliente.telefone|default:"Sem telefone" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Serviços -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="p-4 bg-gray-50 border-b border-gray-200">
+                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Serviços e Valores</h3>
+                </div>
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50/50 text-[10px] font-black text-gray-400 uppercase tracking-tight">
+                        <tr>
+                            <th class="px-6 py-3">Serviço</th>
+                            <th class="px-6 py-3 text-right">Preço Base</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        {% for s in orcamento.servicos.all %}
+                        <tr class="text-sm">
+                            <td class="px-6 py-4 font-medium text-gray-700">{{ s.nome }}</td>
+                            <td class="px-6 py-4 text-right text-gray-900 font-bold">R$ {{ s.preco_base }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-indigo-50/30">
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-bold text-gray-500 uppercase">Total Sugerido</td>
+                            <td class="px-6 py-4 text-right text-lg font-black text-indigo-600">
+                                R$ {{ orcamento.servicos.all|sum_total_valor|default:"0.00" }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Observações -->
+            {% if orcamento.observacoes %}
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Observações</h3>
+                <p class="text-sm text-gray-600 whitespace-pre-line">{{ orcamento.observacoes }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Coluna Lateral (Status e Financeiro) -->
+        <div class="space-y-6">
+            <!-- Card Status -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Status Atual</h3>
+                <div class="inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase 
+                    {% if orcamento.status == 'APROVADO' %}bg-green-100 text-green-700
+                    {% elif orcamento.status == 'PENDENTE' %}bg-yellow-100 text-yellow-700
+                    {% else %}bg-gray-100 text-gray-700{% endif %}">
+                    {{ orcamento.get_status_display }}
+                </div>
+                {% if orcamento.data_validade %}
+                <div class="mt-4 text-xs text-gray-500">
+                    Válido até: <span class="font-bold text-gray-700">{{ orcamento.data_validade|date:"d/m/Y" }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Card Financeiro (Resumo de Sinais) -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Financeiro (Resumo)</h3>
+                <div class="space-y-4">
+                    <div>
+                        <span class="text-[9px] font-black text-gray-400 uppercase block">Valor Acordado</span>
+                        <div class="text-xl font-black text-gray-900">R$ {{ orcamento.valor_total }}</div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100">
+                        <span class="text-[9px] font-black text-green-400 uppercase block">Total Pago (Sinais)</span>
+                        <div class="text-lg font-bold text-green-600">R$ {{
+                            orcamento.pagamentos.all|sum_total_valor|default:"0.00" }}</div>
+                    </div>
+                    <div class="pt-2">
+                        <span class="text-[9px] font-black text-gray-300 uppercase block">Saldo Restante</span>
+                        <div class="text-md font-bold text-gray-400">R$ {{
+                            orcamento.valor_total|subtract:orcamento.pagamentos.all|sum_total_valor|default:"0.00" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Secundário de Conversão -->
+            {% if orcamento.status != 'APROVADO' %}
+            <a href="{% url 'orcamentos:converter_em_contrato' orcamento.pk %}"
+                class="flex items-center justify-center p-4 bg-indigo-50 text-indigo-600 rounded-xl border-2 border-dashed border-indigo-200 hover:bg-indigo-100 transition-all font-bold text-xs uppercase tracking-widest">
+                Confirmar Fichamento
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
