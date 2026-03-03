@@ -50,6 +50,12 @@
                                     <a href="{% url 'contratos:contrato_list' %}"
                                         class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">✍️
                                         Contratos</a>
+                                    <a href="{% url 'encomendas:encomenda_list' %}"
+                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">📋
+                                        Lista de Encomendas</a>
+                                    <a href="{% url 'encomendas:encomenda_create' %}"
+                                        class="block px-4 py-2 text-xs font-bold text-indigo-600 hover:bg-indigo-100 italic">🏄‍♂️
+                                        Nova Encomenda (Surf)</a>
                                 </div>
                             </div>
                             {% endif %}

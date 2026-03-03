@@ -14,10 +14,16 @@ def landing_page(request):
 def index(request):
     agora = timezone.now()
     
-    # Resumo Financeiro
+    # Resumo Financeiro (Fluxo de Caixa Real)
     total_entrada = MovimentacaoCaixa.objects.filter(tipo='ENTRADA').aggregate(Sum('valor'))['valor__sum'] or 0
     total_saida = MovimentacaoCaixa.objects.filter(tipo='SAIDA').aggregate(Sum('valor'))['valor__sum'] or 0
     saldo = total_entrada - total_saida
+
+    # Faturamento (KPI de Vendas - Valor total acordado)
+    from encomendas.models import EncomendaSurf
+    vendas_contratos = Contrato.objects.exclude(status='CANCELADO').aggregate(Sum('valor_final'))['valor_final__sum'] or 0
+    vendas_encomendas = EncomendaSurf.objects.filter(venda_lancada=True).aggregate(Sum('valor_total'))['valor_total__sum'] or 0
+    faturamento_total = vendas_contratos + vendas_encomendas
 
     # Próximos Eventos
     proximos_eventos = Contrato.objects.filter(
@@ -35,6 +41,7 @@ def index(request):
         'saldo': saldo,
         'total_entrada': total_entrada,
         'total_saida': total_saida,
+        'faturamento_total': faturamento_total,
         'proximos_eventos': proximos_eventos,
         'pagamentos_pendentes': pagamentos_pendentes,
     }

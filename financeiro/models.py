@@ -92,6 +92,8 @@ def criar_movimentacao_pagamento(sender, instance, created, **kwargs):
             descricao = f"Recbto: {instance.contrato.cliente.nome} ({instance.get_metodo_display()})"
         elif instance.orcamento:
             descricao = f"Sinal/Reserva: {instance.orcamento.cliente.nome} ({instance.get_metodo_display()})"
+        elif instance.encomenda:
+            descricao = f"Pactuado: {instance.encomenda.cliente.nome} (Prancha #{instance.encomenda.id})"
         else:
             descricao = f"Recebimento Avulso ({instance.get_metodo_display()})"
 

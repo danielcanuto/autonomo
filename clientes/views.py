@@ -14,6 +14,9 @@ def cliente_create(request):
         form = ClienteForm(request.POST)
         if form.is_valid():
             form.save()
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
             return redirect('clientes:cliente_list')
     else:
         form = ClienteForm()

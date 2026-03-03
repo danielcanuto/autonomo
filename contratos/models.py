@@ -3,6 +3,8 @@ from django.utils import timezone
 from clientes.models import Cliente
 from servicos.models import Servico
 from orcamentos.models import Orcamento
+# Removido import direto para evitar circularidade
+# from encomendas.models import EncomendaSurf
 
 class Contrato(models.Model):
     STATUS_CHOICES = (
@@ -83,6 +85,7 @@ class Pagamento(models.Model):
 
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='pagamentos', verbose_name="Contrato", null=True, blank=True)
     orcamento = models.ForeignKey(Orcamento, on_delete=models.CASCADE, related_name='pagamentos', verbose_name="Orçamento", null=True, blank=True)
+    encomenda = models.ForeignKey('encomendas.EncomendaSurf', on_delete=models.CASCADE, related_name='pagamentos', verbose_name="Encomenda", null=True, blank=True)
     valor = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor Pago (R$)")
     data_pagamento = models.DateField(default=timezone.now, verbose_name="Data do Pagamento")
     metodo = models.CharField(max_length=20, choices=METODO_CHOICES, default='PIX', verbose_name="Método de Pagamento")
@@ -90,10 +93,24 @@ class Pagamento(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Pagamento R$ {self.valor} - {self.contrato.cliente.nome}"
+        cliente = "Desconhecido"
+        if self.contrato: cliente = self.contrato.cliente.nome
+        elif self.orcamento: cliente = self.orcamento.cliente.nome
+        elif self.encomenda: cliente = self.encomenda.cliente.nome
+        return f"Pagamento R$ {self.valor} - {cliente}"
 
     class Meta:
         verbose_name = "Pagamento"
         verbose_name_plural = "Pagamentos"
         ordering = ['-data_pagamento']
+
+
+# Sinais para atualização de saldos
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
+@receiver([post_save, post_delete], sender=Pagamento)
+def atualizar_saldo_encomenda(sender, instance, **kwargs):
+    if instance.encomenda:
+        instance.encomenda.save() # O save da encomenda já recalcula o valor_restante
 

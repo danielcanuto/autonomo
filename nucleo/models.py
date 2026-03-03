@@ -36,6 +36,12 @@ class Empresa(models.Model):
     # Documentação
     inscricao_estadual = models.CharField(max_length=20, blank=True, null=True, verbose_name="Inscrição Estadual")
     
+    # Configurações de Módulos (Plug-and-Play)
+    configuracoes = models.JSONField(default=dict, blank=True, verbose_name="Módulos e Configurações")
+    
+    def modulo_ativo(self, nome_modulo):
+        return self.configuracoes.get('modulos', {}).get(nome_modulo, False)
+    
     def __str__(self):
         return self.nome_fantasia
 

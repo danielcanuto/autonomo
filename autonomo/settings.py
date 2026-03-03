@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'dashboard',
     'orcamentos',
     'financeiro',
+    'encomendas',
 ]
 
 MIDDLEWARE = [
