@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:pk>/editar/', views.encomenda_update, name='encomenda_update'),
     path('<int:pk>/fechar/', views.encomenda_fechar_pedido, name='encomenda_fechar_pedido'),
     path('<int:pk>/pagar/', views.registrar_pagamento_encomenda, name='registrar_pagamento_encomenda'),
+    path('<int:pk>/status/', views.encomenda_update_status, name='encomenda_update_status'),
     path('render-form-step/', views.render_form_step, name='render_form_step'),
 ]

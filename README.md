@@ -1,64 +1,52 @@
 # Autônomo Pro - ERP para Profissionais Autônomos e MEI
 
-O **Autônomo Pro** é uma plataforma de gestão inteligente desenvolvida em Django, projetada para simplificar a vida do profissional autônomo. O sistema centraliza desde o primeiro contato com o cliente até a entrega do contrato e a declaração de rendimentos para o MEI.
+O **Autônomo Pro** é uma plataforma de gestão inteligente desenvolvida em Django, projetada para profissionais que buscam excelência operacional e visual. O sistema centraliza o ciclo completo de serviços e produtos customizados, com foco em performance e UX "Premium".
 
-## 🚀 Funcionalidades Principais
+## 🚀 Funcionalidades Principais (2025-READY)
 
-### 💰 Ciclo de Vendas (Vendas)
-- **Gestão de Clientes**: Cadastro completo com histórico de interações e documentos vinculados.
-- **Catálogo de Serviços**: Defina seus serviços com preços base e templates de orçamento.
-- **Orçamentos & Propostas**: Gere orçamentos dinâmicos com substituição automática de variáveis.
-- **Controle de Contratos**: Transforme orçamentos em contratos ativos com gestão de status e datas.
+### 💎 Design System & UX
+- **Design Premium**: Interface baseada em **Tailwind CSS v4** e **OKLCH Design Tokens** para fidelidade cromática e harmonia visual.
+- **Glassmorphism & Micro-interações**: Efeitos de transparência e transições suaves para uma experiência fluida.
+- **Dashboard Unificado**: Visão 360º com agenda integrada de contratos e entregas, além de controle consolidado de recebíveis.
 
-### ⚙️ Gestão Administrativa (Gerencial)
-- **Gestão de Equipe**: Controle de colaboradores com diferentes níveis de acesso (Admin, Gestor, Vendedor, Operador).
-- **Parceiros e Fornecedores**: Cadastro de fornecedores para vinculação de custos e insumos.
-- **Identidade Visual**: Personalização completa com logo da empresa e dados da Razão Social ou perfil autônomo (CPF).
+### 💰 Ciclo de Vendas e CRM
+- **CRM Completo**: Histórico de clientes e documentos vinculados.
+- **Vendas Dinâmicas**: Orçamentos que se transformam em contratos em um clique.
+- **Controle de Recebíveis**: Gestão granular de pagamentos pendentes, parciais e finalizados.
 
-### 📊 Financeiro e Relatórios
-- **Fluxo de Caixa**: Registro automático de entradas (pagamentos) e saídas (custos).
-- **Relatório de Rendimentos MEI**: Relatório mensal automatizado que separa receitas de Serviços e Produtos, facilitando a declaração anual (DASN-SIMEI).
+### 🏄‍♂️ Módulo de Encomendas Customizadas (Ex: Surf)
+- **Centro de Ação (Workflow)**: Gerenciamento rápido de produção (Fila -> Produção -> Entrega) diretamente na ficha.
+- **Painel Financeiro Dinâmico**: Barra de progresso de pagamentos e cálculo automático de saldo devedor.
+- **Ficha Técnica Avançada**: Especificações precisas, pintura artística e suporte a arquivos de Shape 3D.
+
+### ⚙️ Gestão Administrativa e Fiscal
+- **Controle de Equipe**: Níveis de acesso flexíveis (Admin, Gestor, Vendedor, Operador).
+- **Relatório MEI Automatizado**: Separação de rendimentos para facilitar a declaração anual (DASN-SIMEI).
 
 ## 🛠️ Tecnologias Utilizadas
 - **Backend**: Python 3 / Django 5
-- **Frontend**: HTML5 / Tailwind CSS (v3) / FontAwesome 6
-- **Interatividade**: HTMX
-- **Banco de Dados**: SQLite (Desenvolvimento) / PostgreSQL (Recomendado para Produção)
-
-## 📁 Estrutura do Projeto
-- `autonomo`: Pasta de configurações globais do projeto Django.
-- `nucleo`: Gestão de usuários customizados, permissões e configurações de identidade da empresa.
-- `clientes`: Módulo de CRM para gestão de clientes.
-- `servicos`: Catálogo de serviços e categorias.
-- `orcamentos`: Geração de propostas e fluxos de aprovação.
-- `contratos`: Gestão de acordos e vigências.
-- `financeiro`: Fluxo de caixa, gestão de fornecedores e relatórios MEI.
-- `dashboard`: Painel principal e landing page do sistema.
+- **Frontend**: Tailwind CSS v4, FontAwesome 6, Google Fonts (Inter/Outfit)
+- **Tooling**: Node.js, npm, @tailwindcss/cli
+- **Banco de Dados**: SQLite (Desenvolvimento) / PostgreSQL (Produção)
 
 ## ⚙️ Instalação Local
 
 1.  **Clone o repositório**
-2.  **Crie e ative um ambiente virtual:**
+2.  **Ambiente Virtual:**
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # (Windows: venv\Scripts\activate)
-    ```
-3.  **Instale as dependências:**
-    ```bash
+    python3 -m venv venv && source venv/bin/activate
     pip install -r requirements.txt
     ```
-4.  **Execute as migrações:**
+3.  **Frontend (Tailwind v4):**
+    ```bash
+    npm install
+    npm run build
+    ```
+4.  **Django:**
     ```bash
     python manage.py migrate
-    ```
-5.  **Crie seu acesso administrativo:**
-    ```bash
-    python manage.py createsuperuser
-    ```
-6.  **Inicie o servidor:**
-    ```bash
     python manage.py runserver
     ```
 
 ---
-*Desenvolvido em conformidade com as necessidades de fotógrafos, pintores, consultores e diversos profissionais prestadores de serviço.*
+*Redefinindo os padrões de gestão para o profissional moderno.*

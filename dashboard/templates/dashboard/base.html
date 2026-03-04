@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,25 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autônomo Pro - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://unpkg.com/htmx.org@2.0.0"></script>
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body class="bg-background text-foreground font-sans antialiased">
 
     <div class="min-h-screen flex flex-col">
-        <!-- Navbar -->
-        <nav class="bg-white shadow-sm border-b border-gray-200">
+        <!-- Navbar (Premium Glass) -->
+        <nav class="sticky top-0 z-50 glass border-b border-border/50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex">
                         <div class="flex-shrink-0 flex items-center">
-                            <span class="text-xl font-bold text-indigo-600">Autônomo Pro</span>
+                            <span class="text-xl font-bold text-primary">Autônomo Pro</span>
                         </div>
                         <!-- Navigation Links -->
                         <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-4 items-center">
                             <a href="{% url 'dashboard:painel' %}"
-                                class="inline-flex items-center px-3 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'painel' %}text-indigo-600{% else %}text-gray-500 hover:text-indigo-600{% endif %} transition-colors">
+                                class="inline-flex items-center px-3 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'painel' %}text-primary{% else %}text-muted-foreground hover:text-primary{% endif %} transition-colors">
                                 🏠 Painel
                             </a>
 
@@ -31,7 +36,7 @@
                             {% if user.is_vendedor_plus %}
                             <div class="relative group">
                                 <button
-                                    class="flex items-center gap-1 px-3 py-2 text-sm font-bold text-gray-500 group-hover:text-indigo-600 transition-colors">
+                                    class="flex items-center gap-1 px-3 py-2 text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
                                     💰 Vendas
                                     <span
                                         class="text-[10px] transform group-hover:rotate-180 transition-transform">▼</span>
@@ -64,7 +69,7 @@
                             {% if user.is_gestor_plus %}
                             <div class="relative group">
                                 <button
-                                    class="flex items-center gap-1 px-3 py-2 text-sm font-bold text-gray-500 group-hover:text-indigo-600 transition-colors">
+                                    class="flex items-center gap-1 px-3 py-2 text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
                                     ⚙️ Gerencial
                                     <span
                                         class="text-[10px] transform group-hover:rotate-180 transition-transform">▼</span>
@@ -99,7 +104,7 @@
                         <form method="post" action="{% url 'logout' %}" class="inline">
                             {% csrf_token %}
                             <button type="submit"
-                                class="text-xs text-red-500 hover:text-red-700 font-black uppercase tracking-widest">Sair</button>
+                                class="text-[10px] text-accent hover:text-accent/80 font-black uppercase tracking-widest transition-colors">Sair</button>
                         </form>
                         {% else %}
                         <a href="{% url 'login' %}" class="text-sm font-bold text-indigo-600">Entrar</a>
@@ -135,10 +140,12 @@
             {% block content %}{% endblock %}
         </main>
 
-        <!-- Footer -->
-        <footer class="bg-white border-t border-gray-200 mt-auto">
-            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-gray-500">© 2026 Autônomo Pro.</p>
+        <!-- Footer (Clean) -->
+        <footer class="bg-card border-t border-border mt-auto py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-[11px] font-black text-muted-foreground uppercase tracking-[0.2em] opacity-60">
+                    &copy; 2026 Autônomo Pro. O padrão ouro em gestão.
+                </p>
             </div>
         </footer>
     </div>

@@ -9,8 +9,16 @@ from financeiro.models import MovimentacaoCaixa
 
 @login_required
 def encomenda_list(request):
+    status_filter = request.GET.get('status')
     encomendas = EncomendaSurf.objects.all().order_by('-criado_em')
-    return render(request, 'encomendas/encomenda_list.html', {'encomendas': encomendas})
+    
+    if status_filter:
+        encomendas = encomendas.filter(status=status_filter)
+        
+    return render(request, 'encomendas/encomenda_list.html', {
+        'encomendas': encomendas,
+        'status_filter': status_filter
+    })
 
 @login_required
 def encomenda_detail(request, pk):
@@ -22,8 +30,8 @@ def encomenda_create(request):
     if request.method == 'POST':
         form = EncomendaSurfForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('encomendas:encomenda_list')
+            encomenda = form.save()
+            return redirect('encomendas:encomenda_detail', pk=encomenda.pk)
     else:
         form = EncomendaSurfForm()
     
@@ -97,10 +105,28 @@ def registrar_pagamento_encomenda(request, pk):
                 data_pagamento=data,
                 observacao=f"Pagto Saldo Prancha #{encomenda.id}"
             )
+            
+            # Se o saldo zerou e o status for 'FINALIZADA', podemos sugerir mudar para 'ENTREGUE'
+            # mas deixaremos o usuário decidir via botão no detail para maior controle.
+            
             messages.success(request, f"Recebimento de R$ {valor} registrado com sucesso!")
         else:
             messages.error(request, "Informe o valor do pagamento.")
             
+    return redirect('encomendas:encomenda_detail', pk=pk)
+
+@login_required
+def encomenda_update_status(request, pk):
+    encomenda = get_object_or_404(EncomendaSurf, pk=pk)
+    novo_status = request.POST.get('status')
+    
+    if novo_status in dict(EncomendaSurf.STATUS_ENCOMENDA_CHOICES):
+        encomenda.status = novo_status
+        encomenda.save()
+        messages.success(request, f"Status da encomenda atualizado para {encomenda.get_status_display()}.")
+    else:
+        messages.error(request, "Status inválido.")
+        
     return redirect('encomendas:encomenda_detail', pk=pk)
 
 def render_form_step(request):

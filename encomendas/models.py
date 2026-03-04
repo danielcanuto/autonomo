@@ -142,8 +142,10 @@ class EncomendaSurf(models.Model):
     @property
     def total_recebido(self):
         from decimal import Decimal
-        pagos = self.pagamentos.aggregate(models.Sum('valor'))['valor__sum'] or Decimal('0.00')
         entrada = self.valor_entrada or Decimal('0.00')
+        if not self.pk:
+            return entrada
+        pagos = self.pagamentos.aggregate(models.Sum('valor'))['valor__sum'] or Decimal('0.00')
         return entrada + pagos
 
     @property

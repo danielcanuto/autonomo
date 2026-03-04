@@ -28,3 +28,7 @@ venv.bak/
 
 # MacOS
 .DS_Store
+
+# Frontend
+node_modules/
+static/css/output.css

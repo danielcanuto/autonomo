@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@theme {
+  /* Global / Primitive Tokens (OKLCH - 2025 Standard) */
+  --color-brand-50: oklch(0.97 0.01 254);
+  --color-brand-100: oklch(0.93 0.03 254);
+  --color-brand-200: oklch(0.87 0.06 254);
+  --color-brand-500: oklch(0.62 0.15 254);
+  --color-brand-600: oklch(0.55 0.15 254);
+  --color-brand-700: oklch(0.48 0.14 254);
+  --color-brand-900: oklch(0.25 0.07 254);
+
+  /* Semantic Tokens - Light Mode */
+  --color-background: oklch(0.99 0.005 254);
+  --color-foreground: oklch(0.21 0.01 254);
+
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.21 0.01 254);
+
+  --color-primary: var(--color-brand-600);
+  --color-primary-foreground: oklch(0.99 0 0);
+
+  --color-secondary: oklch(0.96 0.01 254);
+  --color-secondary-foreground: oklch(0.25 0.07 254);
+
+  --color-muted: oklch(0.96 0.01 254);
+  --color-muted-foreground: oklch(0.55 0.01 254);
+
+  --color-accent: oklch(0.87 0.12 333);
+  /* Pink accent */
+  --color-accent-foreground: oklch(0.99 0 0);
+
+  --color-border: oklch(0.92 0.01 254);
+
+  /* Shadows & Effects */
+  --shadow-premium: 0 10px 15px -3px oklch(0 0 0 / 0.05), 0 4px 6px -4px oklch(0 0 0 / 0.05);
+  --shadow-glass: 0 8px 32px 0 oklch(0 0 0 / 0.08);
+
+  /* Border Radius */
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+}
+
+@layer utilities {
+  .glass {
+    background: oklch(1 0 0 / 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(1 0 0 / 0.2);
+  }
+
+  .glass-dark {
+    background: oklch(0 0 0 / 0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(1 0 0 / 0.1);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-brand-200 selection:text-brand-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Focus Visible Pattern 2025 */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
