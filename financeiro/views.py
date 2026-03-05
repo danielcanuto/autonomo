@@ -168,6 +168,8 @@ def relatorio_mei(request):
         d['nome_mes'] = meses_nome.get(d['mes'])
         d['total_geral'] = (d['total_servico'] or 0) + (d['total_produto'] or 0)
 
+    return render(request, 'financeiro/report_mei.html', {'dados_mensais': dados})
+
 
 @login_required
 def receber_list(request):
