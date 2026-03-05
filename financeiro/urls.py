@@ -13,4 +13,5 @@ urlpatterns = [
     path('custos/novo/', views.custo_create, name='custo_create'),
     path('sync/', views.sync_financeiro, name='sync'),
     path('relatorio/mei/', views.relatorio_mei, name='relatorio_mei'),
+    path('receber/', views.receber_list, name='receber_list'),
 ]

@@ -2,19 +2,20 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-between items-center mb-8 no-print">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 no-print">
         <div>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Relatório de Receita Bruta (MEI)</h1>
-            <p class="text-sm text-gray-500 font-medium mt-1">Valores mensais para auxílio na declaração anual
-                (DASN-SIMEI)</p>
+            <h1 class="text-4xl font-extrabold text-foreground tracking-tighter leading-tight">📊 Relatório DASN-SIMEI
+            </h1>
+            <p class="text-muted-foreground text-sm font-medium mt-1">Consolidação de Receita Bruta Anual para o MEI.
+            </p>
         </div>
         <button onclick="window.print()"
-            class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-xl text-xs font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm">
-            🖨️ Imprimir Relatório
+            class="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-secondary/80 transition-all shadow-sm">
+            🖨️ Imprimir PDF
         </button>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-card rounded-[2rem] shadow-premium border border-border overflow-hidden">
         <table class="min-w-full divide-y divide-gray-100">
             <thead class="bg-gray-50/50">
                 <tr>

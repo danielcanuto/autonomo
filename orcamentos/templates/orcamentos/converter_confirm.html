@@ -9,11 +9,11 @@
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Converter em Contrato?</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Confirmar Orçamento?</h2>
         <p class="text-gray-600 mb-8 px-4">
-            Você está prestes a converter o orçamento de <strong>{{ orcamento.cliente.nome }}</strong> em um contrato.
+            Você está prestes a confirmar o orçamento de <strong>{{ orcamento.cliente.nome }}</strong>.
             Os serviços e o valor total (<strong>R$ {{ orcamento.valor_total }}</strong>) serão transferidos
-            automaticamente.
+            para um novo contrato automaticamente.
         </p>
 
         <form method="POST" class="max-w-md mx-auto">
@@ -52,7 +52,7 @@
                 </a>
                 <button type="submit"
                     class="px-8 py-3 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 shadow-lg shadow-green-200 transition-all transform hover:-translate-y-0.5">
-                    Converter em Contrato
+                    Confirmar Orçamento
                 </button>
             </div>
         </form>

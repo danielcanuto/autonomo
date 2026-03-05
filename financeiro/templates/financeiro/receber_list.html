@@ -1,0 +1,112 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-4xl font-extrabold text-gray-900 tracking-tighter">Valores a Receber</h1>
+            <p class="text-gray-500 text-sm font-medium mt-1">Detalhamento de saldos pendentes de clientes.</p>
+        </div>
+        <div class="bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg">
+            <span class="text-[10px] font-black uppercase tracking-widest block opacity-70">Total Geral Pendente</span>
+            <span class="text-2xl font-black">
+                R$ {{ total_geral|floatformat:2 }}
+            </span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Contratos Pendentes -->
+        <div class="space-y-4">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-sm font-black text-gray-400 uppercase tracking-widest">Contratos & Eventos</h2>
+                <span class="text-xs font-bold text-gray-400">
+                    Total: R$ {{ total_contratos|floatformat:2 }}
+                </span>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+                <div class="divide-y divide-gray-50">
+                    {% for c in contratos %}
+                    <div class="p-6 hover:bg-gray-50 transition-colors group">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                    {{ c.cliente.nome }}
+                                </h3>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">
+                                    Contrato #{{ c.id }} - {{ c.data_inicio|date:"d/m/Y" }}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-black text-gray-900 block">
+                                    R$ {{ c.saldo_restante|floatformat:2 }}
+                                </span>
+                                <span class="text-[9px] font-black text-indigo-400 uppercase">Pendente</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded font-bold uppercase">
+                                Total: R$ {{ c.valor_final }}
+                            </span>
+                            <a href="{% url 'orcamentos:orcamento_update' c.pk %}"
+                                class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Gerenciar
+                                Pagamentos &rarr;</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-10 text-center text-gray-400 italic text-sm">Nenhum saldo pendente em contratos
+                        ativos.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Encomendas Pendentes -->
+        <div class="space-y-4">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-sm font-black text-gray-400 uppercase tracking-widest">Encomendas de Pranchas</h2>
+                <span class="text-xs font-bold text-gray-400">
+                    Total: R$ {{ total_encomendas|floatformat:2 }}
+                </span>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+                <div class="divide-y divide-gray-50">
+                    {% for e in encomendas %}
+                    <div class="p-6 hover:bg-gray-50 transition-colors group">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                    {{ e.cliente.nome }}
+                                </h3>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">
+                                    {{ e.get_tipo_prancha_display }} - Ficha #{{ e.id }}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-black text-gray-900 block">
+                                    R$ {{ e.valor_restante|floatformat:2 }}
+                                </span>
+                                <span class="text-[9px] font-black text-indigo-400 uppercase">A Receber</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded font-bold uppercase">
+                                Total: R$ {{ e.valor_total }}
+                            </span>
+                            <a href="{% url 'encomendas:encomenda_update' e.pk %}"
+                                class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Abrir
+                                Ficha &rarr;</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-10 text-center text-gray-400 italic text-sm">Nenhuma encomenda com saldo pendente.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

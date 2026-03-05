@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Fornecedor, Custo, MovimentacaoCaixa
 from contratos.models import Contrato, Pagamento
+from encomendas.models import EncomendaSurf
 from django.db import models
 from django.db.models import Sum
+from .forms import FornecedorForm, CustoForm, MovimentacaoForm
 
 @login_required
 def financeiro_dashboard(request):
@@ -12,11 +14,17 @@ def financeiro_dashboard(request):
     total_saida = MovimentacaoCaixa.objects.filter(tipo='SAIDA').aggregate(Sum('valor'))['valor__sum'] or 0
     saldo = total_entrada - total_saida
     
+    # Valores a Receber (Contratos Ativos + Encomendas não pagas)
+    receber_contratos = sum(c.saldo_restante for c in Contrato.objects.exclude(status='CANCELADO').exclude(status_pagamento='PAGO'))
+    receber_encomendas = EncomendaSurf.objects.exclude(status='ENTREGUE').aggregate(Sum('valor_restante'))['valor_restante__sum'] or 0
+    total_a_receber = receber_contratos + receber_encomendas
+    
     return render(request, 'financeiro/dashboard.html', {
         'movimentacoes': movimentacoes,
         'saldo': saldo,
         'total_entrada': total_entrada,
         'total_saida': total_saida,
+        'total_a_receber': total_a_receber,
     })
 
 # Fornecedores
@@ -160,4 +168,23 @@ def relatorio_mei(request):
         d['nome_mes'] = meses_nome.get(d['mes'])
         d['total_geral'] = (d['total_servico'] or 0) + (d['total_produto'] or 0)
 
-    return render(request, 'financeiro/report_mei.html', {'dados_mensais': dados})
+
+@login_required
+def receber_list(request):
+    contratos = Contrato.objects.exclude(status='CANCELADO').exclude(status_pagamento='PAGO').order_by('data_inicio')
+    encomendas = EncomendaSurf.objects.exclude(status='ENTREGUE').exclude(valor_restante=0).order_by('data_encomenda')
+    
+    # Filtrar apenas contratos que realmente tem saldo (propriedade saldo_restante > 0)
+    contratos_pendentes = [c for c in contratos if c.saldo_restante > 0]
+    
+    total_contratos = sum(c.saldo_restante for c in contratos_pendentes)
+    total_encomendas = encomendas.aggregate(Sum('valor_restante'))['valor_restante__sum'] or 0
+    total_geral = total_contratos + total_encomendas
+
+    return render(request, 'financeiro/receber_list.html', {
+        'contratos': contratos_pendentes,
+        'encomendas': encomendas,
+        'total_contratos': total_contratos,
+        'total_encomendas': total_encomendas,
+        'total_geral': total_geral,
+    })

@@ -8,7 +8,9 @@
     <title>Autônomo Pro - Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://unpkg.com/htmx.org@2.0.0"></script>
@@ -42,24 +44,24 @@
                                         class="text-[10px] transform group-hover:rotate-180 transition-transform">▼</span>
                                 </button>
                                 <div
-                                    class="absolute left-0 w-48 bg-white border border-gray-100 shadow-xl rounded-xl py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-50">
+                                    class="absolute left-0 w-48 bg-card border border-border shadow-xl rounded-xl py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-50">
                                     <a href="{% url 'servicos:servico_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">🛠️
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">🛠️
                                         Serviços</a>
                                     <a href="{% url 'clientes:cliente_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">👥
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">👥
                                         Clientes</a>
                                     <a href="{% url 'orcamentos:orcamento_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">📄
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">📄
                                         Orçamentos</a>
                                     <a href="{% url 'contratos:contrato_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">✍️
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">✍️
                                         Contratos</a>
                                     <a href="{% url 'encomendas:encomenda_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">📋
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">📋
                                         Lista de Encomendas</a>
                                     <a href="{% url 'encomendas:encomenda_create' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-indigo-600 hover:bg-indigo-100 italic">🏄‍♂️
+                                        class="block px-4 py-2 text-xs font-bold text-primary hover:bg-primary/10 italic">🏄‍♂️
                                         Nova Encomenda (Surf)</a>
                                 </div>
                             </div>
@@ -75,21 +77,21 @@
                                         class="text-[10px] transform group-hover:rotate-180 transition-transform">▼</span>
                                 </button>
                                 <div
-                                    class="absolute left-0 w-48 bg-white border border-gray-100 shadow-xl rounded-xl py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-50">
+                                    class="absolute left-0 w-48 bg-card border border-border shadow-xl rounded-xl py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-50">
                                     <a href="{% url 'financeiro:dashboard' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">💰
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">💰
                                         Financeiro</a>
                                     <a href="{% url 'nucleo:equipe_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">👥
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">👥
                                         Equipe</a>
                                     <a href="{% url 'financeiro:fornecedor_list' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">🤝
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">🤝
                                         Fornecedores</a>
                                     <a href="{% url 'financeiro:relatorio_mei' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">📊
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">📊
                                         Relatório MEI</a>
                                     <a href="{% url 'nucleo:empresa_configuracao' %}"
-                                        class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">⚙️
+                                        class="block px-4 py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary">⚙️
                                         Configurações</a>
                                 </div>
                             </div>
@@ -143,7 +145,8 @@
         <!-- Footer (Clean) -->
         <footer class="bg-card border-t border-border mt-auto py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-[11px] font-black text-muted-foreground uppercase tracking-[0.2em] opacity-60">
+                <p
+                    class="text-center text-[11px] font-black text-muted-foreground uppercase tracking-[0.2em] opacity-60">
                     &copy; 2026 Autônomo Pro. O padrão ouro em gestão.
                 </p>
             </div>

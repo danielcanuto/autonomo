@@ -3,10 +3,10 @@ from django import template
 register = template.Library()
 
 @register.filter
-def sum_total_valor(queryset):
+def sum_total_valor(queryset, field_name='valor'):
     if not queryset:
         return 0
-    return sum(item.valor for item in queryset)
+    return sum(getattr(item, field_name, 0) or 0 for item in queryset)
 
 @register.filter
 def subtract(value, arg):

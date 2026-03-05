@@ -49,11 +49,17 @@ def index(request):
         valor_restante__gt=0
     ).order_by('-criado_em')[:5]
 
+    # Cálculo Total de Recebíveis
+    receber_contratos = sum(c.saldo_restante for c in Contrato.objects.exclude(status='CANCELADO').exclude(status_pagamento='PAGO'))
+    receber_encomendas = EncomendaSurf.objects.exclude(status='ENTREGUE').aggregate(Sum('valor_restante'))['valor_restante__sum'] or 0
+    total_a_receber = receber_contratos + receber_encomendas
+
     context = {
         'saldo': saldo,
         'total_entrada': total_entrada,
         'total_saida': total_saida,
         'faturamento_total': faturamento_total,
+        'total_a_receber': total_a_receber,
         'proximos_eventos': proximos_eventos,
         'proximas_entregas': proximas_entregas,
         'contratos_pendentes': contratos_pendentes,

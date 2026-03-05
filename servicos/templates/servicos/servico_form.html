@@ -2,13 +2,18 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">{{ titulo }}</h1>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div>
+            <h1 class="text-4xl font-extrabold text-foreground tracking-tighter leading-tight">{{ titulo }}</h1>
+            <p class="text-muted-foreground text-sm font-medium mt-1">Definição técnica e comercial do serviço.</p>
+        </div>
         <a href="{% url 'servicos:servico_list' %}"
-            class="text-sm font-medium text-gray-600 hover:text-indigo-600">&larr; Voltar para lista</a>
+            class="inline-flex items-center text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:translate-x-[-4px] transition-transform">
+            &larr; Voltar
+        </a>
     </div>
 
-    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+    <div class="bg-card shadow-premium border border-border rounded-[2rem] overflow-hidden">
         <form method="POST" class="p-6 space-y-6">
             {% csrf_token %}
 

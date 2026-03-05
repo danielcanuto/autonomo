@@ -8,7 +8,8 @@
             Bem-vindo de volta! Aqui está uma visão panorâmica do desempenho do seu negócio hoje.
         </p>
     </div>
-    <div class="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest bg-secondary/50 px-4 py-2 rounded-full border border-border">
+    <div
+        class="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest bg-secondary/50 px-4 py-2 rounded-full border border-border">
         <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
         Sistema Online
     </div>
@@ -16,20 +17,31 @@
 
 <!-- Cards Financeiros Rápidos (Premium Layout) -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <div class="relative overflow-hidden bg-primary rounded-3xl p-6 text-primary-foreground shadow-premium group transition-all hover:scale-[1.02]">
-        <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
+    <div
+        class="relative overflow-hidden bg-primary rounded-3xl p-6 text-primary-foreground shadow-premium group transition-all hover:scale-[1.02]">
+        <div
+            class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors">
+        </div>
         <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">Saldo em Caixa</p>
         <p class="text-3xl font-extrabold mb-1">R$ {{ saldo|floatformat:2 }}</p>
         <p class="text-[10px] opacity-60 font-semibold tracking-tight">Disponibilidade líquida imediata</p>
     </div>
 
-    <div class="bg-card rounded-3xl shadow-premium border border-border p-6 transition-all hover:border-primary/30">
-        <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Faturamento Total</p>
-        <p class="text-2xl font-extrabold text-foreground">R$ {{ faturamento_total|floatformat:2 }}</p>
-        <div class="mt-3 flex items-center gap-1.5">
-            <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-bold">KPI Vendas</span>
+    <a href="{% url 'financeiro:receber_list' %}"
+        class="bg-card rounded-3xl shadow-premium border border-indigo-100 p-6 transition-all hover:scale-[1.02] bg-indigo-50/10 group">
+        <div class="flex justify-between items-start mb-2">
+            <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Valores a Receber</p>
+            <svg class="w-4 h-4 text-indigo-300 group-hover:text-indigo-600 transition-colors" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
         </div>
-    </div>
+        <p class="text-2xl font-extrabold text-indigo-600">R$ {{ total_a_receber|floatformat:2 }}</p>
+        <div class="mt-3 flex items-center gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600 text-[9px] font-bold">Saldo
+                Pendente</span>
+        </div>
+    </a>
 
     <div class="bg-card rounded-3xl shadow-premium border border-border p-6 tracking-tight">
         <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Entradas Reais</p>
@@ -50,11 +62,13 @@
     <div class="bg-card rounded-3xl shadow-premium border border-border overflow-hidden flex flex-col">
         <div class="px-6 py-5 border-b border-border bg-secondary/30 flex items-center justify-between">
             <h3 class="text-lg font-bold text-foreground">Próximos compromissos</h3>
-            <span class="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-tight">Agenda</span>
+            <span
+                class="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-tight">Agenda</span>
         </div>
         <ul class="divide-y divide-border">
             {% if proximos_eventos %}
-            <li class="bg-secondary/10 px-6 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+            <li
+                class="bg-secondary/10 px-6 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 📸 Eventos e Contratos
             </li>
             {% for evento in proximos_eventos %}
@@ -63,13 +77,15 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-bold text-foreground uppercase tracking-tight">
-                                <a href="{% url 'contratos:contrato_update' evento.id %}" class="group-hover:text-primary transition-colors">
+                                <a href="{% url 'contratos:contrato_update' evento.id %}"
+                                    class="group-hover:text-primary transition-colors">
                                     {{ evento.cliente.nome }}
                                 </a>
                             </p>
                             <p class="text-[11px] text-muted-foreground mt-0.5">Contrato #{{ evento.id }}</p>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-xl text-[10px] font-black bg-secondary text-secondary-foreground border border-border/50">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-xl text-[10px] font-black bg-secondary text-secondary-foreground border border-border/50">
                             {{ evento.data_hora_evento|date:"d/m H:i" }}
                         </span>
                     </div>
@@ -79,7 +95,8 @@
             {% endif %}
 
             {% if proximas_entregas %}
-            <li class="bg-primary/5 px-6 py-2 text-[10px] font-black text-primary uppercase tracking-widest border-t border-border">
+            <li
+                class="bg-primary/5 px-6 py-2 text-[10px] font-black text-primary uppercase tracking-widest border-t border-border">
                 🏄‍♂️ Entregas de Encomendas
             </li>
             {% for entrega in proximas_entregas %}
@@ -88,13 +105,16 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-bold text-foreground uppercase tracking-tight">
-                                <a href="{% url 'encomendas:encomenda_detail' entrega.id %}" class="group-hover:text-primary transition-colors">
+                                <a href="{% url 'encomendas:encomenda_detail' entrega.id %}"
+                                    class="group-hover:text-primary transition-colors">
                                     {{ entrega.cliente.nome }}
                                 </a>
                             </p>
-                            <p class="text-[11px] text-muted-foreground mt-0.5">{{ entrega.get_tipo_prancha_display }} {{ entrega.tamanho }}</p>
+                            <p class="text-[11px] text-muted-foreground mt-0.5">{{ entrega.get_tipo_prancha_display }}
+                                {{ entrega.tamanho }}</p>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-xl text-[10px] font-black bg-primary/10 text-primary border border-primary/20">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-xl text-[10px] font-black bg-primary/10 text-primary border border-primary/20">
                             {{ entrega.data_previsao_entrega|date:"d/m" }}
                         </span>
                     </div>
@@ -116,11 +136,13 @@
     <div class="bg-card rounded-3xl shadow-premium border border-border overflow-hidden flex flex-col">
         <div class="px-6 py-5 border-b border-border bg-accent/5 flex items-center justify-between">
             <h3 class="text-lg font-bold text-foreground">Controle de Recebíveis</h3>
-            <span class="px-2.5 py-1 rounded-lg bg-accent/10 text-accent text-[10px] font-extrabold uppercase tracking-tight">Financeiro</span>
+            <span
+                class="px-2.5 py-1 rounded-lg bg-accent/10 text-accent text-[10px] font-extrabold uppercase tracking-tight">Financeiro</span>
         </div>
         <ul class="divide-y divide-border">
             {% if contratos_pendentes %}
-            <li class="bg-secondary/10 px-6 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+            <li
+                class="bg-secondary/10 px-6 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 📄 Contratos
             </li>
             {% for pgto in contratos_pendentes %}
@@ -128,11 +150,13 @@
                 <div class="flex justify-between items-center">
                     <div class="flex flex-col gap-0.5">
                         <p class="text-sm font-bold text-foreground uppercase tracking-tight">
-                            <a href="{% url 'contratos:contrato_update' pgto.id %}" class="group-hover:text-accent transition-colors">
+                            <a href="{% url 'contratos:contrato_update' pgto.id %}"
+                                class="group-hover:text-accent transition-colors">
                                 {{ pgto.cliente.nome }}
                             </a>
                         </p>
-                        <p class="text-[10px] text-muted-foreground font-medium">Iniciado em {{ pgto.data_inicio|date:"d/m/Y" }}</p>
+                        <p class="text-[10px] text-muted-foreground font-medium">Iniciado em {{
+                            pgto.data_inicio|date:"d/m/Y" }}</p>
                     </div>
                     <div class="flex flex-col items-end gap-1">
                         <span class="text-sm font-black text-foreground">R$ {{ pgto.valor_final }}</span>
@@ -146,7 +170,8 @@
             {% endif %}
 
             {% if encomendas_pendentes %}
-            <li class="bg-accent/5 px-6 py-2 text-[10px] font-black text-accent uppercase tracking-widest border-t border-border">
+            <li
+                class="bg-accent/5 px-6 py-2 text-[10px] font-black text-accent uppercase tracking-widest border-t border-border">
                 🏄‍♂️ Encomendas
             </li>
             {% for enc in encomendas_pendentes %}
@@ -154,11 +179,13 @@
                 <div class="flex justify-between items-center">
                     <div class="flex flex-col gap-0.5">
                         <p class="text-sm font-bold text-foreground uppercase tracking-tight">
-                            <a href="{% url 'encomendas:encomenda_detail' enc.id %}" class="group-hover:text-accent transition-colors">
+                            <a href="{% url 'encomendas:encomenda_detail' enc.id %}"
+                                class="group-hover:text-accent transition-colors">
                                 {{ enc.cliente.nome }}
                             </a>
                         </p>
-                        <p class="text-[10px] text-muted-foreground font-medium">{{ enc.get_tipo_prancha_display }} - Ficha #{{ enc.id }}</p>
+                        <p class="text-[10px] text-muted-foreground font-medium">{{ enc.get_tipo_prancha_display }} -
+                            Ficha #{{ enc.id }}</p>
                     </div>
                     <div class="flex flex-col items-end gap-1">
                         <span class="text-sm font-black text-foreground">R$ {{ enc.valor_total }}</span>
@@ -185,22 +212,26 @@
         <a href="{% url 'clientes:cliente_list' %}"
             class="group flex items-center justify-between p-5 bg-card border border-border rounded-2xl shadow-sm hover:shadow-premium hover:border-primary/30 transition-all">
             <span class="font-bold text-sm">Clientes</span>
-            <span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
+            <span
+                class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
         </a>
         <a href="{% url 'servicos:servico_list' %}"
             class="group flex items-center justify-between p-5 bg-card border border-border rounded-2xl shadow-sm hover:shadow-premium hover:border-primary/30 transition-all">
             <span class="font-bold text-sm">Serviços</span>
-            <span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
+            <span
+                class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
         </a>
         <a href="{% url 'contratos:contrato_list' %}"
             class="group flex items-center justify-between p-5 bg-card border border-border rounded-2xl shadow-sm hover:shadow-premium hover:border-primary/30 transition-all">
             <span class="font-bold text-sm">Contratos</span>
-            <span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
+            <span
+                class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
         </a>
         <a href="{% url 'financeiro:dashboard' %}"
             class="group flex items-center justify-between p-5 bg-card border border-border rounded-2xl shadow-sm hover:shadow-premium hover:border-primary/30 transition-all">
             <span class="font-bold text-sm">Financeiro</span>
-            <span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
+            <span
+                class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">→</span>
         </a>
     </div>
 </div>

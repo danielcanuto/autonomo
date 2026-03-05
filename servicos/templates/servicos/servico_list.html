@@ -2,10 +2,12 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Catálogo de Serviços</h1>
-            <p class="mt-2 text-sm text-gray-600">Gerencie os serviços e categorias oferecidos por você.</p>
+            <h1 class="text-4xl font-extrabold text-foreground tracking-tighter leading-tight">🛠️ Catálogo de Serviços
+            </h1>
+            <p class="text-muted-foreground text-sm font-medium mt-1">Gerencie os serviços e categorias oferecidos por
+                você.</p>
         </div>
         <div class="flex gap-3">
             <a href="{% url 'servicos:categoria_create' %}"
@@ -13,10 +15,7 @@
                 Nova Categoria
             </a>
             <a href="{% url 'servicos:servico_create' %}"
-                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-indigo-700 transition-colors">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
+                class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-2xl font-black text-xs uppercase tracking-widest shadow-premium hover:scale-105 transition-all">
                 Novo Serviço
             </a>
         </div>
@@ -25,9 +24,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Lista de Serviços -->
         <div class="lg:col-span-2">
-            <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
-                <div class="px-4 py-5 border-b border-gray-200 bg-gray-50 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Serviços Ativos</h3>
+            <div class="bg-card shadow-premium border border-border rounded-[2rem] overflow-hidden">
+                <div class="px-6 py-5 border-b border-border bg-secondary/30">
+                    <h3 class="text-lg font-bold text-foreground">Serviços Ativos</h3>
                 </div>
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-white">
@@ -80,9 +79,9 @@
 
         <!-- Lista de Categorias -->
         <div class="lg:col-span-1">
-            <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
-                <div class="px-4 py-5 border-b border-gray-200 bg-gray-50 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Categorias</h3>
+            <div class="bg-card shadow-premium border border-border rounded-[2rem] overflow-hidden">
+                <div class="px-6 py-5 border-b border-border bg-secondary/30">
+                    <h3 class="text-lg font-bold text-foreground">Categorias</h3>
                 </div>
                 <ul class="divide-y divide-gray-200">
                     {% for cat in categorias %}
